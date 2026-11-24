@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Diario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+  <header class="contenedor">
+    <span class="etiqueta">invierno 2026</span>
+    <h1>pedro rivera</h1>
+    <p>Lo que me va pasando mientras cambian las hojas.</p>
+  </header>
+
+  <main class="contenedor">
+    <section class="nueva">
+      <h2>Nueva entrada</h2>
+      <form method="POST" enctype="multipart/form-data">
+        <div class="fila">
+          <div>
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" name="fecha" required>
+          </div>
+          <div>
+            <label for="animo">Ánimo</label>
+            <select id="animo" name="animo">
+              <option value="🍂">🍂 Tranquilo</option>
+              <option value="☕">☕ Acogedor</option>
+              <option value="🎃">🎃 Divertido</option>
+              <option value="🌧️">🌧️ Melancólico</option>
+            </select>
+          </div>
+        </div>
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" maxlength="80" required>
+        <label for="texto">¿Qué pasó?</label>
+        <textarea id="texto" name="texto" required></textarea>
+        <!-- Las fotos las añadiremos en la Fase 2 -->
+              <label for="fotos">Fotos (opcional)</label>
+        <input type="file" id="fotos" name="fotos" accept="image/*" multiple> 
+
+ <button type="submit">Guardar entrada</button>
+      </form>
+    </section>
+
+    <section>
+      <div class="barra">
+        <h2>Mis días</h2>
+      </div>
+      <div class="linea">
+        {% for entrada in entradas %}
+          <article class="entrada" data-emoji="{{ entrada.emoji }}">
+            <time>{{ entrada.fecha }}</time>
+            <h3>{{ entrada.titulo }}</h3>
+            <p style="white-space: pre-wrap;">{{ entrada.texto }}</p>
+          {% if entrada.fotos %}
+              <div class="galeria">
+                {% for url in entrada.fotos.split(',') %}
+                  {% if url %}
+                    <img src="{{ url }}" alt="Foto de {{ entrada.titulo }}" loading="lazy">
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}  
+ </article>
+        {% else %}
+          <p class="vacio">Aún no hay entradas. Escribe la primera arriba 🍁</p>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+</body>
+</html>
