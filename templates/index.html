@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
 </head>
 <body>
+
+  <!-- Contenedor para las hojas cayendo -->
+  <div class="hojas" id="hojas" aria-hidden="true"></div>
+
   <header class="contenedor">
     <span class="etiqueta">invierno 2026</span>
     <h1>pedro rivera</h1>
@@ -36,13 +40,14 @@
         </div>
         <label for="titulo">Título</label>
         <input type="text" id="titulo" name="titulo" maxlength="80" required>
+        
         <label for="texto">¿Qué pasó?</label>
         <textarea id="texto" name="texto" required></textarea>
-        <!-- Las fotos las añadiremos en la Fase 2 -->
-              <label for="fotos">Fotos (opcional)</label>
-        <input type="file" id="fotos" name="fotos" accept="image/*" multiple> 
+        
+        <label for="fotos">Fotos (opcional)</label>
+        <input type="file" id="fotos" name="fotos" accept="image/*" multiple>
 
- <button type="submit">Guardar entrada</button>
+        <button type="submit">Guardar entrada</button>
       </form>
     </section>
 
@@ -56,7 +61,8 @@
             <time>{{ entrada.fecha }}</time>
             <h3>{{ entrada.titulo }}</h3>
             <p style="white-space: pre-wrap;">{{ entrada.texto }}</p>
-          {% if entrada.fotos %}
+
+            {% if entrada.fotos %}
               <div class="galeria">
                 {% for url in entrada.fotos.split(',') %}
                   {% if url %}
@@ -64,13 +70,32 @@
                   {% endif %}
                 {% endfor %}
               </div>
-            {% endif %}  
- </article>
+            {% endif %}
+          </article>
         {% else %}
           <p class="vacio">Aún no hay entradas. Escribe la primera arriba 🍁</p>
         {% endfor %}
       </div>
     </section>
   </main>
+
+  <!-- Script para las hojas cayendo -->
+  <script>
+    const contHojas = document.getElementById("hojas");
+    const tipos = ["🍂", "🍁", "🍃"];
+    
+    if (contHojas) {
+      for (let i = 0; i < 14; i++) {
+        const s = document.createElement("span");
+        s.className = "hoja";
+        s.textContent = tipos[i % tipos.length];
+        s.style.left = Math.random() * 100 + "%";
+        s.style.animationDuration = 9 + Math.random() * 10 + "s";
+        s.style.animationDelay = -Math.random() * 15 + "s";
+        s.style.fontSize = 1 + Math.random() * 1 + "rem";
+        contHojas.appendChild(s);
+      }
+    }
+  </script>
 </body>
 </html>
